@@ -1,4 +1,4 @@
-# Claude-Code
+# GitHub API approach with Claude-CoWork
 
 A collection of static HTML sites for **Digital Culture IT Solutions** built and maintained with AI assistance via the Claude API (GitHub API approach).
 
