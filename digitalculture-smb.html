@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Culture IT Solutions — Small &amp; Medium Business IT</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04080f;--surface:#080e1a;--surface2:#0d1525;--border:rgba(0,168,255,0.14);--border2:rgba(255,255,255,0.07);--accent:#00a8ff;--accent3:#33bbff;--purple:#6655ee;--danger:#ff4d6d;--text:#cdd8e8;--muted:#506070;--white:#f0f6ff;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden;}
+#bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+header,section,.marquee-section,.stats-section,footer,#back-to-top,#scroll-progress{position:relative;z-index:10;}
+#scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--accent),var(--purple));z-index:9999;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:5;opacity:0.3;}
+header{position:fixed;top:0;left:0;right:0;background:rgba(4,8,15,0.9);backdrop-filter:blur(28px) saturate(1.4);border-bottom:1px solid rgba(0,168,255,0.1);box-shadow:0 1px 0 rgba(0,168,255,0.06),0 4px 32px rgba(0,0,0,0.5);}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;}
+.logo-block{display:flex;flex-direction:column;gap:0.08rem;}
+.logo-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:0.12em;color:var(--white);text-decoration:none;}
+.logo-name span{color:var(--accent);text-shadow:0 0 22px rgba(0,168,255,0.55);}
+.logo-sub{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:rgba(0,168,255,0.5);text-transform:uppercase;}
+nav ul{display:flex;gap:1.75rem;list-style:none;align-items:center;}
+nav a{color:var(--muted);text-decoration:none;font-size:0.8rem;font-weight:400;letter-spacing:0.05em;transition:color 0.2s;position:relative;}
+nav a:not(.nav-remote):not(.nav-cta)::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform 0.25s;}
+nav a:not(.nav-remote):not(.nav-cta):hover{color:var(--white);}
+nav a:not(.nav-remote):not(.nav-cta):hover::after{transform:scaleX(1);}
+.nav-remote{background:transparent!important;border:1px solid rgba(0,168,255,0.4)!important;color:var(--accent)!important;padding:0.4rem 1rem;border-radius:2px;font-weight:500!important;transition:all 0.2s!important;}
+.nav-remote:hover{background:rgba(0,168,255,0.1)!important;box-shadow:0 0 18px rgba(0,168,255,0.22)!important;}
+.nav-cta{background:var(--accent);color:#000!important;padding:0.45rem 1.2rem;border-radius:2px;font-weight:600!important;font-size:0.8rem!important;letter-spacing:0.06em!important;box-shadow:0 0 20px rgba(0,168,255,0.28)!important;transition:all 0.2s!important;}
+.nav-cta:hover{background:var(--accent3)!important;transform:translateY(-1px);box-shadow:0 0 32px rgba(0,168,255,0.45)!important;}
+.hero{min-height:100vh;display:flex;align-items:center;padding:9rem 2.5rem 5rem;overflow:hidden;position:relative;}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,168,255,0.4),transparent);}
+.hero-content{position:relative;max-width:700px;z-index:2;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,168,255,0.08);border:1px solid rgba(0,168,255,0.25);border-radius:2px;padding:0.35rem 0.9rem;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:2rem;animation:fadeUp 0.6s ease 0.1s both;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,168,255,0.5);}50%{opacity:0.5;box-shadow:0 0 0 5px rgba(0,168,255,0);}}
+.hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,6vw,5rem);line-height:1.0;letter-spacing:-0.03em;color:var(--white);margin-bottom:1.5rem;animation:fadeUp 0.7s ease 0.25s both;}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tw-line{font-family:'DM Mono',monospace;font-size:0.95rem;color:var(--accent);letter-spacing:0.05em;margin-bottom:1.25rem;animation:fadeUp 0.7s ease 0.35s both;}
+.tw-cursor{display:inline-block;width:2px;height:1em;background:var(--accent);margin-left:2px;animation:blink 1s step-end infinite;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero p.lead{font-size:1.1rem;color:var(--muted);max-width:520px;margin-bottom:2.5rem;font-weight:300;line-height:1.75;animation:fadeUp 0.7s ease 0.45s both;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.7s ease 0.55s both;}
+.btn-primary{background:var(--accent);color:#000;padding:0.85rem 2rem;border-radius:2px;font-weight:500;font-size:0.95rem;text-decoration:none;letter-spacing:0.04em;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.5rem;box-shadow:0 0 22px rgba(0,168,255,0.25);}
+.btn-primary:hover{background:var(--accent3);transform:translateY(-2px);box-shadow:0 0 38px rgba(0,168,255,0.48);}
+.btn-ghost{border:1px solid var(--border2);color:var(--text);padding:0.85rem 2rem;border-radius:2px;font-size:0.95rem;text-decoration:none;letter-spacing:0.04em;transition:all 0.2s;}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.25);color:var(--white);}
+.hero-stats{display:flex;gap:3rem;flex-wrap:wrap;margin-top:4rem;padding-top:2.5rem;border-top:1px solid var(--border2);animation:fadeUp 0.7s ease 0.7s both;}
+.stat-num{font-family:'Syne',sans-serif;font-weight:700;font-size:1.75rem;color:var(--white);letter-spacing:-0.02em;}
+.stat-num span{color:var(--accent);}
+.stat-label{font-size:0.75rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
+.marquee-section{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:0.9rem 0;background:rgba(8,14,26,0.88);backdrop-filter:blur(8px);}
+.marquee-track{display:flex;gap:3rem;animation:marquee 38s linear infinite;white-space:nowrap;}
+.marquee-item{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}
+.marquee-item::before{content:'◆';color:var(--accent);font-size:0.45rem;}
+@keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.container{max-width:1280px;margin:0 auto;padding:0 2.5rem;}
+section.section{padding:6rem 0;}
+.section-label{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.9rem;}
+.section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(2rem,3.5vw,2.75rem);color:var(--white);line-height:1.1;letter-spacing:-0.02em;margin-bottom:1.25rem;}
+.section-desc{color:var(--muted);font-size:1rem;line-height:1.75;max-width:540px;}
+.bg-surface{background:linear-gradient(180deg,rgba(8,14,26,0.93) 0%,rgba(13,21,37,0.93) 100%);backdrop-filter:blur(4px);position:relative;}
+.bg-surface::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,168,255,0.3),transparent);}
+.services-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem;gap:2rem;flex-wrap:wrap;}
+.cert-row{display:flex;gap:0.75rem;align-items:center;margin-top:1.5rem;flex-wrap:wrap;}
+.cert-pill{display:flex;align-items:center;gap:0.4rem;background:rgba(0,168,255,0.06);border:1px solid rgba(0,168,255,0.18);border-radius:2px;padding:0.3rem 0.7rem;font-family:'DM Mono',monospace;font-size:0.63rem;color:var(--accent);letter-spacing:0.08em;}
+.cert-pill::before{content:'✓';font-size:0.7rem;}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+.service-card{background:rgba(8,14,26,0.92);padding:2.5rem;position:relative;overflow:hidden;transition:background 0.3s;cursor:default;backdrop-filter:blur(4px);}
+.service-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--accent),var(--purple));transform:scaleX(0);transform-origin:left;transition:transform 0.4s ease;}
+.service-card:hover{background:rgba(13,21,37,0.97);}
+.service-card:hover::after{transform:scaleX(1);}
+.service-icon{width:46px;height:46px;background:rgba(0,168,255,0.07);border:1px solid rgba(0,168,255,0.15);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:1.5rem;transition:all 0.3s;}
+.service-card:hover .service-icon{background:rgba(0,168,255,0.14);box-shadow:0 0 24px rgba(0,168,255,0.2);}
+.service-card h3{font-family:'Syne',sans-serif;font-weight:600;font-size:1.05rem;color:var(--white);margin-bottom:0.75rem;letter-spacing:-0.01em;}
+.service-card p{color:var(--muted);font-size:0.875rem;line-height:1.7;}
+.service-num{position:absolute;top:1.5rem;right:1.75rem;font-family:'DM Mono',monospace;font-size:0.68rem;color:rgba(255,255,255,0.07);letter-spacing:0.1em;}
+.stats-section{background:linear-gradient(135deg,rgba(0,168,255,0.07) 0%,rgba(4,8,15,0.88) 50%,rgba(102,85,238,0.06) 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4rem 0;position:relative;backdrop-filter:blur(4px);}
+.stats-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,168,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,168,255,0.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:1;}
+.stat-block{text-align:center;padding:2rem;position:relative;}
+.stat-block:not(:last-child)::after{content:'';position:absolute;right:0;top:25%;bottom:25%;width:1px;background:var(--border);}
+.stat-big{font-family:'Syne',sans-serif;font-weight:800;font-size:2.75rem;color:var(--white);letter-spacing:-0.03em;line-height:1;margin-bottom:0.5rem;}
+.stat-big span{color:var(--accent);}
+.stat-desc{font-size:0.78rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.why-features{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem;}
+.feature-tile{border:1px solid var(--border2);border-radius:4px;padding:1.5rem;background:rgba(8,14,26,0.7);backdrop-filter:blur(4px);transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;}
+.feature-tile:hover{border-color:rgba(0,168,255,0.3);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,168,255,0.08);}
+.feature-tile h4{font-family:'Syne',sans-serif;font-weight:600;font-size:0.9rem;color:var(--white);margin-bottom:0.5rem;}
+.feature-tile p{font-size:0.82rem;color:var(--muted);line-height:1.6;}
+.feature-icon{font-size:1.4rem;margin-bottom:0.75rem;}
+.cap-stack{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.cap-row{display:flex;align-items:center;gap:1.5rem;background:rgba(8,14,26,0.88);padding:1.25rem 1.75rem;transition:background 0.25s;cursor:default;position:relative;overflow:hidden;backdrop-filter:blur(4px);}
+.cap-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform 0.35s ease;}
+.cap-row:hover{background:rgba(13,21,37,0.97);}
+.cap-row:hover::before{transform:scaleY(1);}
+.cap-icon{width:40px;height:40px;flex-shrink:0;background:rgba(0,168,255,0.07);border:1px solid rgba(0,168,255,0.15);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all 0.25s;}
+.cap-row:hover .cap-icon{background:rgba(0,168,255,0.14);box-shadow:0 0 18px rgba(0,168,255,0.2);}
+.cap-info{flex:1;}
+.cap-title{font-family:'Syne',sans-serif;font-weight:600;font-size:0.9rem;color:var(--white);margin-bottom:0.2rem;}
+.cap-desc{font-size:0.8rem;color:var(--muted);line-height:1.5;}
+.cap-badge{font-family:'DM Mono',monospace;font-size:0.63rem;color:var(--accent);letter-spacing:0.08em;background:rgba(0,168,255,0.08);border:1px solid rgba(0,168,255,0.2);padding:0.2rem 0.6rem;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+.process-header{text-align:center;margin-bottom:4rem;}
+.process-header .section-desc{margin:0 auto;}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+.process-steps::before{content:'';position:absolute;top:28px;left:12.5%;width:75%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.3;}
+.step{text-align:center;padding:0 1.5rem;position:relative;}
+.step-num{width:56px;height:56px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-family:'DM Mono',monospace;font-size:0.85rem;color:var(--accent);background:rgba(4,8,15,0.92);position:relative;z-index:1;transition:all 0.3s;}
+.step:hover .step-num{background:rgba(0,168,255,0.1);border-color:var(--accent);box-shadow:0 0 24px rgba(0,168,255,0.22);}
+.step h4{font-family:'Syne',sans-serif;font-weight:600;font-size:1rem;color:var(--white);margin-bottom:0.6rem;}
+.step p{font-size:0.85rem;color:var(--muted);line-height:1.6;}
+.pricing-intro{color:var(--muted);max-width:640px;font-size:0.95rem;line-height:1.75;margin-bottom:3rem;}
+.rate-subtitle{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;color:var(--white);margin-bottom:0.4rem;display:flex;align-items:center;gap:0.75rem;}
+.rate-subtitle::before{content:'';display:block;width:20px;height:2px;background:var(--accent);flex-shrink:0;}
+.rate-subtitle-note{font-size:0.82rem;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:0.03em;margin-bottom:1.5rem;padding-left:2.15rem;}
+.rate-blocks{background:var(--border);border:1px solid var(--border);margin-bottom:3.5rem;}
+.rate-panel{background:rgba(8,14,26,0.88);padding:2rem 2.5rem;backdrop-filter:blur(4px);}
+.rate-panel h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--white);margin-bottom:1.25rem;letter-spacing:0.02em;}
+.rate-table{width:100%;border-collapse:collapse;}
+.rate-table tr{border-bottom:1px solid var(--border2);}
+.rate-table tr:last-child{border-bottom:none;}
+.rate-table td{padding:0.8rem 0;font-size:0.88rem;}
+.rate-name{color:var(--text);}
+.rate-val{text-align:right;font-family:'DM Mono',monospace;color:var(--accent);font-weight:500;white-space:nowrap;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.5rem;}
+.price-card{border:1px solid var(--border2);border-radius:4px;padding:2.5rem 2rem;background:rgba(8,14,26,0.82);backdrop-filter:blur(4px);position:relative;transition:transform 0.3s,border-color 0.3s;}
+.price-card.featured{border-color:var(--accent);background:linear-gradient(160deg,rgba(0,168,255,0.08) 0%,rgba(4,8,15,0.92) 60%,rgba(102,85,238,0.07) 100%);box-shadow:0 0 44px rgba(0,168,255,0.1),inset 0 0 44px rgba(0,168,255,0.03);}
+.price-card:hover:not(.featured){transform:translateY(-4px);border-color:rgba(255,255,255,0.15);}
+.price-card.featured:hover{transform:translateY(-4px);}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;font-size:0.62rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;padding:0.25rem 0.9rem;border-radius:2px;font-family:'DM Mono',monospace;white-space:nowrap;}
+.price-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--white);margin-bottom:0.4rem;}
+.price-tagline{font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;}
+.price-amount{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;color:var(--white);letter-spacing:-0.02em;line-height:1.1;margin-bottom:1.5rem;}
+.price-unit{display:block;font-size:0.78rem;font-weight:400;color:var(--accent);font-family:'DM Mono',monospace;letter-spacing:0.04em;margin-top:0.3rem;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:2rem;}
+.price-features li{font-size:0.875rem;color:var(--muted);display:flex;gap:0.75rem;align-items:flex-start;}
+.price-features li::before{content:'→';color:var(--accent);font-family:'DM Mono',monospace;flex-shrink:0;}
+.btn-plan{display:block;text-align:center;padding:0.8rem;border-radius:2px;font-size:0.875rem;font-weight:500;text-decoration:none;transition:all 0.2s;letter-spacing:0.04em;}
+.btn-outline{border:1px solid var(--border2);color:var(--text);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-solid{background:var(--accent);color:#000;}
+.btn-solid:hover{background:var(--accent3);}
+.pricing-note{font-size:0.78rem;color:var(--muted);font-family:'DM Mono',monospace;border-top:1px solid var(--border2);padding-top:2rem;margin-top:3rem;line-height:1.8;}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+.tcard{border:1px solid var(--border2);border-radius:4px;padding:2rem;background:rgba(4,8,15,0.72);backdrop-filter:blur(4px);position:relative;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;}
+.tcard:hover{border-color:rgba(0,168,255,0.25);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,168,255,0.08);}
+.tcard-quote{font-size:2.5rem;color:var(--accent);opacity:0.25;font-family:'Syne',sans-serif;line-height:1;margin-bottom:1rem;}
+.tcard p{font-size:0.9rem;color:var(--muted);line-height:1.75;margin-bottom:1.5rem;font-style:italic;}
+.tcard-author{display:flex;align-items:center;gap:0.75rem;}
+.author-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:600;color:#000;flex-shrink:0;}
+.author-name{font-size:0.85rem;color:var(--white);font-weight:500;}
+.author-role{font-size:0.75rem;color:var(--muted);}
+.stars{color:#ffd166;font-size:0.75rem;margin-bottom:0.25rem;letter-spacing:0.1em;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+.contact-intro{color:var(--muted);font-size:0.95rem;line-height:1.75;margin-bottom:2.5rem;}
+.contact-methods{display:flex;flex-direction:column;gap:1rem;margin-bottom:2.5rem;}
+.contact-item{display:flex;align-items:center;gap:1rem;border:1px solid var(--border2);border-radius:4px;padding:1rem 1.25rem;background:rgba(8,14,26,0.72);backdrop-filter:blur(4px);transition:border-color 0.2s,box-shadow 0.2s;}
+.contact-item:hover{border-color:rgba(0,168,255,0.3);box-shadow:0 4px 20px rgba(0,168,255,0.06);}
+.contact-icon{width:38px;height:38px;background:rgba(0,168,255,0.08);border:1px solid rgba(0,168,255,0.18);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.contact-label{font-size:0.72rem;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;font-family:'DM Mono',monospace;}
+.contact-val{font-size:0.95rem;color:var(--white);}
+.contact-val a{color:var(--white);text-decoration:none;}
+.contact-val a:hover{color:var(--accent);}
+.remote-cta{border:1px solid rgba(0,168,255,0.3);border-radius:4px;padding:1.5rem;background:linear-gradient(135deg,rgba(0,168,255,0.07) 0%,rgba(4,8,15,0.88) 100%);display:flex;align-items:center;gap:1.25rem;box-shadow:inset 0 0 30px rgba(0,168,255,0.04);backdrop-filter:blur(4px);}
+.remote-cta-icon{font-size:2rem;}
+.remote-cta-text h4{font-family:'Syne',sans-serif;font-weight:600;font-size:0.95rem;color:var(--white);margin-bottom:0.3rem;}
+.remote-cta-text p{font-size:0.82rem;color:var(--muted);}
+.btn-remote{margin-left:auto;flex-shrink:0;background:var(--accent);color:#000;padding:0.55rem 1.25rem;border-radius:2px;font-size:0.82rem;font-weight:500;text-decoration:none;letter-spacing:0.04em;transition:all 0.2s;white-space:nowrap;}
+.btn-remote:hover{background:var(--accent3);}
+.issue-form{display:flex;flex-direction:column;gap:1rem;}
+.form-group{display:flex;flex-direction:column;gap:0.4rem;}
+.form-group label{font-size:0.78rem;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;font-family:'DM Mono',monospace;}
+.form-group input,.form-group select,.form-group textarea{background:rgba(8,14,26,0.82);border:1px solid var(--border2);border-radius:2px;padding:0.65rem 0.9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;transition:border-color 0.2s,box-shadow 0.2s;outline:none;backdrop-filter:blur(4px);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,168,255,0.08);}
+.form-group textarea{resize:vertical;min-height:100px;}
+.form-group select option{background:var(--surface2);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.btn-submit{background:var(--accent);color:#000;border:none;padding:0.9rem;border-radius:2px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.88rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;margin-top:0.5rem;}
+.btn-submit:hover{background:var(--accent3);transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,168,255,0.28);}
+.btn-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.form-msg{font-size:0.82rem;text-align:center;padding:0.75rem;border-radius:2px;display:none;}
+.form-msg.success{display:block;color:#28ca41;background:rgba(40,202,65,0.08);border:1px solid rgba(40,202,65,0.2);}
+.form-msg.error{display:block;color:var(--danger);background:rgba(255,77,109,0.08);border:1px solid rgba(255,77,109,0.2);}
+footer{border-top:1px solid var(--border);padding:2.5rem;background:rgba(8,14,26,0.94);backdrop-filter:blur(12px);}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--white);}
+.footer-logo span{color:var(--accent);}
+.footer-sub{font-size:0.68rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;font-family:'DM Mono',monospace;}
+.footer-links{display:flex;gap:2rem;list-style:none;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:0.82rem;transition:color 0.2s;}
+.footer-links a:hover{color:var(--white);}
+.footer-copy{font-size:0.75rem;color:var(--muted);font-family:'DM Mono',monospace;}
+#back-to-top{position:fixed;bottom:2rem;right:2rem;z-index:200;width:42px;height:42px;border-radius:50%;background:var(--accent);border:none;color:#000;font-size:1.1rem;cursor:pointer;opacity:0;visibility:hidden;transition:all 0.3s;display:flex;align-items:center;justify-content:center;}
+#back-to-top.visible{opacity:1;visibility:visible;}
+#back-to-top:hover{background:var(--accent3);transform:translateY(-2px);box-shadow:0 0 20px rgba(0,168,255,0.4);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+@media(max-width:1024px){.services-grid{grid-template-columns:repeat(2,1fr);}.why-grid{grid-template-columns:1fr;gap:3rem;}.process-steps{grid-template-columns:repeat(2,1fr);gap:2rem;}.process-steps::before{display:none;}.pricing-grid{grid-template-columns:1fr;}.testimonials-grid{grid-template-columns:1fr;}.contact-grid{grid-template-columns:1fr;gap:3rem;}.stats-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){.nav-inner{padding:1rem 1.5rem;}nav ul{display:none;}.hero{padding:7rem 1.5rem 3rem;}section.section{padding:4rem 0;}.container{padding:0 1.5rem;}.services-grid{grid-template-columns:1fr;}.why-features{grid-template-columns:1fr;}.stats-grid{grid-template-columns:1fr 1fr;}.hero-stats{gap:2rem;}.remote-cta{flex-wrap:wrap;}.btn-remote{margin-left:0;}footer{padding:2rem 1.5rem;}.form-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="scroll-progress"></div>
+<header>
+  <div class="nav-inner">
+    <div class="logo-block">
+      <a href="#" class="logo-name">DIGITAL <span>CULTURE</span></a>
+      <span class="logo-sub">IT Solutions</span>
+    </div>
+    <nav><ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="https://www.teamviewer.com/en-us/download/portal/windows/" target="_blank" class="nav-remote">⚡ Remote Support</a></li>
+      <li><a href="#why">About</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul></nav>
+  </div>
+</header>
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>Serving Small &amp; Medium Business — Bergen County, NJ</div>
+    <h1>IT Infrastructure<br>Built for <em>Business.</em></h1>
+    <p class="tw-line">// <span id="tw-word">Infrastructure</span><span class="tw-cursor"></span></p>
+    <p class="lead">Cloud, infrastructure, and end-to-end IT support engineered for small and medium businesses. Enterprise-grade experience — without the enterprise price tag.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Get a Free Consultation →</a>
+      <a href="#services" class="btn-ghost">Explore Services</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num" data-count="500" data-suffix="+">500<span>+</span></div><div class="stat-label">Projects Completed</div></div>
+      <div><div class="stat-num" data-count="99.9" data-suffix="%">99.9<span>%</span></div><div class="stat-label">Uptime Guarantee</div></div>
+      <div><div class="stat-num" data-count="25" data-suffix="+">25<span>+</span></div><div class="stat-label">Years Experience</div></div>
+      <div><div class="stat-num">24<span>/7</span></div><div class="stat-label">Support Available</div></div>
+    </div>
+  </div>
+</section>
+<div class="marquee-section"><div class="marquee-track">
+  <span class="marquee-item">Infrastructure Design</span><span class="marquee-item">Cloud Migration</span><span class="marquee-item">Microsoft 365</span><span class="marquee-item">Managed IT Support</span><span class="marquee-item">Network Security</span><span class="marquee-item">AWS Solutions</span><span class="marquee-item">Server Management</span><span class="marquee-item">Workstation Deployment</span><span class="marquee-item">VPN &amp; Remote Access</span><span class="marquee-item">Backup &amp; Recovery</span><span class="marquee-item">Cybersecurity</span><span class="marquee-item">Virtualization</span><span class="marquee-item">Infrastructure Design</span><span class="marquee-item">Cloud Migration</span><span class="marquee-item">Microsoft 365</span><span class="marquee-item">Managed IT Support</span><span class="marquee-item">Network Security</span><span class="marquee-item">AWS Solutions</span><span class="marquee-item">Server Management</span><span class="marquee-item">Workstation Deployment</span><span class="marquee-item">VPN &amp; Remote Access</span><span class="marquee-item">Backup &amp; Recovery</span><span class="marquee-item">Cybersecurity</span><span class="marquee-item">Virtualization</span>
+</div></div>
+<section id="services" class="section bg-surface"><div class="container">
+  <div class="services-header">
+    <div>
+      <div class="section-label">// What We Do</div>
+      <div class="section-title">Enterprise-Grade Services<br>for Growing Businesses</div>
+      <div class="cert-row">
+        <div class="cert-pill">AWS Certified Solutions Architect</div>
+        <div class="cert-pill">VMware Certified Professional</div>
+        <div class="cert-pill">25+ Years Experience</div>
+      </div>
+    </div>
+    <p class="section-desc" style="max-width:320px">From day-to-day helpdesk to full infrastructure overhauls — we deliver the technical depth that small and medium businesses need to compete.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card fade-in"><span class="service-num">01</span><div class="service-icon">🏗️</div><h3>Infrastructure Solutions</h3><p>Design, implementation, and management of robust IT infrastructure. From network architecture to server deployment, we build the foundation for your success.</p></div>
+    <div class="service-card fade-in"><span class="service-num">02</span><div class="service-icon">☁️</div><h3>Cloud Services</h3><p>Seamless cloud migration, optimization, and management across AWS, Azure, and Google Cloud. Maximize efficiency, scalability, and cost-effectiveness in the cloud.</p></div>
+    <div class="service-card fade-in"><span class="service-num">03</span><div class="service-icon">🔄</div><h3>Migration Services</h3><p>Expert-led system migrations with zero business disruption. Legacy modernization, Microsoft 365 rollouts, cloud transitions — secure and on schedule.</p></div>
+    <div class="service-card fade-in"><span class="service-num">04</span><div class="service-icon">💾</div><h3>Storage &amp; Backup</h3><p>Scalable SAN/NAS and cloud storage solutions. Automated backup, disaster recovery planning, and fast restore — your data always secure and accessible.</p></div>
+    <div class="service-card fade-in"><span class="service-num">05</span><div class="service-icon">🛠️</div><h3>Managed IT Support</h3><p>Proactive monitoring, rapid-response helpdesk, and expert troubleshooting. We keep your operations running smoothly — on-site or remote, same day.</p></div>
+    <div class="service-card fade-in"><span class="service-num">06</span><div class="service-icon">🖥️</div><h3>Office &amp; Workstation Support</h3><p>End-to-end office IT management: workstation setup, software deployment, printer support, network configuration, and user onboarding.</p></div>
+    <div class="service-card fade-in"><span class="service-num">07</span><div class="service-icon">🔒</div><h3>Cybersecurity</h3><p>Multi-layer security hardening, firewall configuration, endpoint protection, security audits, and compliance-ready policies to protect your business.</p></div>
+    <div class="service-card fade-in"><span class="service-num">08</span><div class="service-icon">🤖</div><h3>AI &amp; Automation</h3><p>We use AI to streamline app and website deployment, helping businesses self-host in AWS with confidence, lower costs, and less manual overhead.</p></div>
+    <div class="service-card fade-in"><span class="service-num">09</span><div class="service-icon">📡</div><h3>Network &amp; VPN</h3><p>Structured cabling, Wi-Fi design, router and switch configuration, VPN setup for remote teams, and secure guest networks — done right the first time.</p></div>
+  </div>
+</div></section>
+<div class="stats-section"><div class="container"><div class="stats-grid">
+  <div class="stat-block"><div class="stat-big" data-count="500" data-suffix="+">500<span>+</span></div><div class="stat-desc">Projects Completed</div></div>
+  <div class="stat-block"><div class="stat-big" data-count="99.9" data-suffix="%">99.9<span>%</span></div><div class="stat-desc">Uptime Guarantee</div></div>
+  <div class="stat-block"><div class="stat-big">24<span>/7</span></div><div class="stat-desc">Support Available</div></div>
+  <div class="stat-block"><div class="stat-big" data-count="25" data-suffix="+">25<span>+</span></div><div class="stat-desc">Years Experience</div></div>
+</div></div></div>
+<section id="why" class="section"><div class="container"><div class="why-grid">
+  <div>
+    <div class="section-label">// Why Digital Culture IT</div>
+    <div class="section-title">Local Expertise.<br>Enterprise-Grade Skill.</div>
+    <p class="section-desc">We're not a faceless MSP with a ticket queue. We're your dedicated IT partner — 25+ years across AWS, VMware, Windows infrastructure, and cloud engineering — invested in getting things right the first time.</p>
+    <div class="why-features">
+      <div class="feature-tile fade-in"><div class="feature-icon">🎯</div><h4>Expert Team</h4><p>Certified professionals with deep experience across all major platforms.</p></div>
+      <div class="feature-tile fade-in"><div class="feature-icon">📊</div><h4>Proactive Monitoring</h4><p>24/7 system monitoring to resolve issues before they impact your business.</p></div>
+      <div class="feature-tile fade-in"><div class="feature-icon">📈</div><h4>Scalable Solutions</h4><p>Infrastructure that grows with your business, from 5 users to 150+.</p></div>
+      <div class="feature-tile fade-in"><div class="feature-icon">🔒</div><h4>Security First</h4><p>Comprehensive security measures to protect your data and ensure compliance.</p></div>
+      <div class="feature-tile fade-in"><div class="feature-icon">💰</div><h4>Cost Optimization</h4><p>Strategic planning to maximize ROI and eliminate unnecessary IT overhead.</p></div>
+      <div class="feature-tile fade-in"><div class="feature-icon">⚡</div><h4>Same-Day Response</h4><p>Local Bergen County presence — fast response, on-site when it matters most.</p></div>
+    </div>
+  </div>
+  <div class="why-visual">
+    <div class="cap-stack">
+      <div class="cap-row"><div class="cap-icon">🏗️</div><div class="cap-info"><div class="cap-title">Infrastructure &amp; Cloud</div><div class="cap-desc">AWS, Azure, VMware — designed for performance and resilience</div></div><span class="cap-badge">AWS Certified</span></div>
+      <div class="cap-row"><div class="cap-icon">🔒</div><div class="cap-info"><div class="cap-title">Security &amp; Compliance</div><div class="cap-desc">Endpoint protection, firewall hardening, and audit-ready policies</div></div><span class="cap-badge">Security First</span></div>
+      <div class="cap-row"><div class="cap-icon">🖥️</div><div class="cap-info"><div class="cap-title">Microsoft 365 &amp; Office IT</div><div class="cap-desc">Migrations, deployments, and ongoing end-user support</div></div><span class="cap-badge">M365 Expert</span></div>
+      <div class="cap-row"><div class="cap-icon">📡</div><div class="cap-info"><div class="cap-title">Network &amp; VPN</div><div class="cap-desc">Structured cabling, Wi-Fi, remote access — zero dead zones</div></div><span class="cap-badge">VMware Certified</span></div>
+      <div class="cap-row"><div class="cap-icon">⚡</div><div class="cap-info"><div class="cap-title">Same-Day Response</div><div class="cap-desc">Bergen County, NJ — on-site or remote, when it matters most</div></div><span class="cap-badge" style="color:#28ca41;border-color:rgba(40,202,65,0.3);background:rgba(40,202,65,0.07)">● Available</span></div>
+      <div class="cap-row"><div class="cap-icon">💾</div><div class="cap-info"><div class="cap-title">Backup &amp; Disaster Recovery</div><div class="cap-desc">Automated, tested, and restorable — protecting business continuity</div></div><span class="cap-badge">25+ Yrs Exp</span></div>
+    </div>
+  </div>
+</div></div></section>
+<section id="process" class="section bg-surface"><div class="container">
+  <div class="process-header">
+    <div class="section-label">// How It Works</div>
+    <div class="section-title">Simple. Fast. Done Right.</div>
+    <p class="section-desc">From first contact to fully resolved — here's what to expect when you work with Digital Culture IT.</p>
+  </div>
+  <div class="process-steps">
+    <div class="step"><div class="step-num">01</div><h4>Free Consultation</h4><p>Tell us about your environment and goals. No pitch, no pressure — just an honest assessment.</p></div>
+    <div class="step"><div class="step-num">02</div><h4>Scoping &amp; Quote</h4><p>Clear scope of work and transparent pricing before any work begins. No surprises.</p></div>
+    <div class="step"><div class="step-num">03</div><h4>Execution</h4><p>On-site or remote, we complete the work with precision — keeping you updated throughout.</p></div>
+    <div class="step"><div class="step-num">04</div><h4>Ongoing Partnership</h4><p>Post-project follow-up, documentation, and ongoing support to keep you at full speed.</p></div>
+  </div>
+</div></section>
+<section id="pricing" class="section"><div class="container">
+  <div class="section-label">// Pricing Guide</div>
+  <div class="section-title">Transparent Pricing.<br>No Surprise Invoices.</div>
+  <p class="pricing-intro">Competitive rates built for Bergen County small &amp; medium businesses. Every engagement includes our local, same-day response guarantee. Quotes are always free.</p>
+  <div class="rate-subtitle">Hourly &amp; Project Rates</div>
+  <p class="rate-subtitle-note">Billed in 15-minute increments. No retainer required.</p>
+  <div class="rate-blocks"><div class="rate-panel fade-in">
+    <h3>Support &amp; Projects</h3>
+    <table class="rate-table">
+      <tr><td class="rate-name">Standard support (business hours)</td><td class="rate-val">$125 – $165 / hr</td></tr>
+      <tr><td class="rate-name">After-hours &amp; emergency response</td><td class="rate-val">$185 – $245 / hr</td></tr>
+      <tr><td class="rate-name">Network &amp; infrastructure projects</td><td class="rate-val">$150 – $200 / hr</td></tr>
+      <tr><td class="rate-name">New workstation setup &amp; deployment</td><td class="rate-val">$150 – $250 / device</td></tr>
+    </table>
+  </div></div>
+  <div class="rate-subtitle">Prepay &amp; Save</div>
+  <p class="rate-subtitle-note">Buy hours upfront — lock your rate, skip the invoice cycle. Priority scheduling included.</p>
+  <div class="pricing-grid">
+    <div class="price-card fade-in">
+      <h3>Starter Block</h3><p class="price-tagline">A solid buffer for occasional support and small projects.</p>
+      <div class="price-amount">$575 – $760<span class="price-unit">5 hours · save ~8%</span></div>
+      <ul class="price-features"><li>Effective rate: ~$115 – $152 / hr</li><li>Priority scheduling over pay-as-you-go</li><li>Billed in 15-minute increments</li><li>Applies to standard business-hours rates</li><li>Valid 12 months from purchase</li></ul>
+      <a href="#contact" class="btn-plan btn-outline">Get Started</a>
+    </div>
+    <div class="price-card featured fade-in">
+      <div class="price-badge">Best Value</div>
+      <h3>Pro Block</h3><p class="price-tagline">The smart choice for businesses with regular IT needs.</p>
+      <div class="price-amount">$1,100 – $1,452<span class="price-unit">10 hours · save ~12%</span></div>
+      <ul class="price-features"><li>Effective rate: ~$110 – $145 / hr</li><li>Priority scheduling over pay-as-you-go</li><li>Billed in 15-minute increments</li><li>Applies to standard business-hours rates</li><li>Valid 12 months — unused hours roll over once with renewal</li></ul>
+      <a href="#contact" class="btn-plan btn-solid">Get Started</a>
+    </div>
+    <div class="price-card fade-in">
+      <h3>Power Block</h3><p class="price-tagline">Maximum savings for high-volume or project-heavy environments.</p>
+      <div class="price-amount">$2,050 – $2,706<span class="price-unit">20 hours · save ~18%</span></div>
+      <ul class="price-features"><li>Effective rate: ~$103 – $135 / hr</li><li>Priority scheduling over pay-as-you-go</li><li>Billed in 15-minute increments</li><li>Applies to standard business-hours rates</li><li>Valid 12 months — unused hours roll over once with renewal</li></ul>
+      <a href="#contact" class="btn-plan btn-outline">Get Started</a>
+    </div>
+  </div>
+  <p class="pricing-note">Pricing reflects competitive 2026 Bergen County, NJ market ranges and may vary with environment complexity, scope, and compliance needs. Hour blocks apply to standard business-hours rates only — after-hours and emergency work is billed separately. Blocks are non-refundable after work begins. Contact us for a custom quote.</p>
+</div></section>
+<section id="testimonials" class="section bg-surface"><div class="container">
+  <div class="section-label">// Client Stories</div>
+  <div class="section-title">What Clients Say.</div>
+  <div class="testimonials-grid">
+    <div class="tcard fade-in"><div class="tcard-quote">"</div><p>Our office went from constant ticket backlogs and frustrated staff to same-day resolutions. Digital Culture IT set up our workstations, printers, and VPN from scratch and trained everyone in a single afternoon.</p><div class="tcard-author"><div class="author-avatar" style="background:linear-gradient(135deg,#00a8ff,#6655ee)">KM</div><div><div class="stars">★★★★★</div><div class="author-name">Karen M.</div><div class="author-role">Office Manager, NJ Law Firm</div></div></div></div>
+    <div class="tcard fade-in"><div class="tcard-quote">"</div><p>We had a full Microsoft 365 rollout across 30 desktops with zero disruption to our business day. The team handled everything — setup, migration, and end-user support — professionally and on schedule.</p><div class="tcard-author"><div class="author-avatar" style="background:linear-gradient(135deg,#ff4d6d,#6655ee)">DP</div><div><div class="stars">★★★★★</div><div class="author-name">David P.</div><div class="author-role">Managing Director, Accounting Firm</div></div></div></div>
+    <div class="tcard fade-in"><div class="tcard-quote">"</div><p>When our server went down on a Monday morning, they had us back up within two hours. Their remote support is fast, knowledgeable, and doesn't talk down to non-technical staff. Exactly what a small business needs.</p><div class="tcard-author"><div class="author-avatar" style="background:linear-gradient(135deg,#ffd166,#00a8ff)">TR</div><div><div class="stars">★★★★★</div><div class="author-name">Tara R.</div><div class="author-role">Operations Manager, Medical Practice</div></div></div></div>
+  </div>
+</div></section>
+<section id="contact" class="section"><div class="container"><div class="contact-grid">
+  <div>
+    <div class="section-label">// Get In Touch</div>
+    <div class="section-title">Ready to Elevate<br>Your IT?</div>
+    <p class="contact-intro">Free consultation on any engagement. Tell us what's going on and we'll give you a straight, honest assessment — no sales pitch, no obligation.</p>
+    <div class="contact-methods">
+      <div class="contact-item"><div class="contact-icon">📞</div><div><div class="contact-label">Phone / Text</div><div class="contact-val"><a href="tel:+15512364157">(551) 236-4157</a></div></div></div>
+      <div class="contact-item"><div class="contact-icon">✉️</div><div><div class="contact-label">Email</div><div class="contact-val"><a href="mailto:digitalcultureit@gmail.com">digitalcultureit@gmail.com</a></div></div></div>
+      <div class="contact-item"><div class="contact-icon">🌐</div><div><div class="contact-label">Website</div><div class="contact-val"><a href="https://digitalcultureit.com" target="_blank">digitalcultureit.com</a></div></div></div>
+      <div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-label">Service Area</div><div class="contact-val">Bergen County, NJ &amp; Surrounding</div></div></div>
+      <div class="contact-item"><div class="contact-icon">⏰</div><div><div class="contact-label">Business Hours</div><div class="contact-val">Mon–Fri 9am–6pm · Emergency Support Available</div></div></div>
+    </div>
+    <div class="remote-cta">
+      <div class="remote-cta-icon">🖥️</div>
+      <div class="remote-cta-text"><h4>Need Immediate Remote Support?</h4><p>Download TeamViewer and we'll connect instantly.</p></div>
+      <a href="https://www.teamviewer.com/en-us/download/portal/windows/" target="_blank" class="btn-remote">Launch →</a>
+    </div>
+  </div>
+  <div>
+    <div class="section-label">// Support Request</div>
+    <div class="section-title" style="font-size:1.5rem;margin-bottom:0.5rem">Submit a Ticket</div>
+    <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.75rem">✓ Free consultation available · Response within 24 hours</p>
+    <form id="issueForm" class="issue-form" action="https://formspree.io/f/mzzgrqzy" method="POST">
+      <div class="form-row">
+        <div class="form-group"><label for="name">Name *</label><input type="text" id="name" name="name" required placeholder="Your full name"></div>
+        <div class="form-group"><label for="company">Company</label><input type="text" id="company" name="company" placeholder="Company name"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label for="email">Email *</label><input type="email" id="email" name="email" required placeholder="your@email.com"></div>
+        <div class="form-group"><label for="phone">Phone</label><input type="tel" id="phone" name="phone" placeholder="(000) 000-0000"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label for="priority">Priority *</label><select id="priority" name="priority" required><option value="" disabled selected>Select Priority</option><option value="Low">Low — General Inquiry</option><option value="Medium">Medium — Non-Critical Issue</option><option value="High">High — Service Disruption</option><option value="Critical">Critical — System Down</option></select></div>
+        <div class="form-group"><label for="category">Category *</label><select id="category" name="category" required><option value="" disabled selected>Select Category</option><option value="Infrastructure">Infrastructure</option><option value="Cloud Services">Cloud Services</option><option value="Migration">Migration</option><option value="Storage">Storage / Backup</option><option value="IT Support">IT Support</option><option value="Office Support">Office / Workstation</option><option value="Cybersecurity">Cybersecurity</option><option value="Network">Network / VPN</option><option value="Other">Other</option></select></div>
+      </div>
+      <div class="form-group"><label for="subject">Subject *</label><input type="text" id="subject" name="subject" required placeholder="Brief summary of your issue or request"></div>
+      <div class="form-group"><label for="message">Description *</label><textarea id="message" name="message" required placeholder="Please describe your issue or project in detail..."></textarea></div>
+      <button type="submit" class="btn-submit">SUBMIT REQUEST</button>
+      <div id="formMessage" class="form-msg"></div>
+    </form>
+  </div>
+</div></div></section>
+<footer><div class="footer-inner">
+  <div><div class="footer-logo">DIGITAL <span>CULTURE</span></div><div class="footer-sub">IT Solutions</div></div>
+  <ul class="footer-links"><li><a href="#services">Services</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#testimonials">Testimonials</a></li><li><a href="#contact">Contact</a></li><li><a href="https://www.teamviewer.com/en-us/download/portal/windows/" target="_blank">Remote Support</a></li></ul>
+  <div class="footer-copy">© 2026 Digital Culture IT Solutions · Bergen County, NJ</div>
+</div></footer>
+<button id="back-to-top" aria-label="Back to top">↑</button>
+<script>
+// ── Canvas circuit node network ──────────────────────────────────────────────
+(function(){
+  var canvas=document.getElementById('bg-canvas');
+  var ctx=canvas.getContext('2d');
+  var W,H,nodes=[],pulses=[],mouse={x:-999,y:-999};
+  var CFG={nodeCount:90,maxDist:180,nodeSpeed:0.28,mouseRadius:160,mouseStrength:0.012,
+           accent:'0,168,255',pulse:'0,212,255',pulseCount:2,pulseSpeed:0.004};
+
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+  }
+
+  function Node(){
+    this.x=Math.random()*W;
+    this.y=Math.random()*H;
+    var angle=Math.random()*Math.PI*2;
+    var spd=CFG.nodeSpeed*(0.5+Math.random()*0.8);
+    this.vx=Math.cos(angle)*spd;
+    this.vy=Math.sin(angle)*spd;
+    this.r=1.5+Math.random()*1.5;
+    this.phase=Math.random()*Math.PI*2;
+    this.pulseSpd=0.025+Math.random()*0.025;
+  }
+
+  function initNodes(){
+    nodes=[];
+    for(var i=0;i<CFG.nodeCount;i++) nodes.push(new Node());
+  }
+
+  function spawnPulse(){
+    // pick a random edge
+    var tries=0;
+    while(tries++<40){
+      var a=nodes[Math.floor(Math.random()*nodes.length)];
+      var b=nodes[Math.floor(Math.random()*nodes.length)];
+      if(a===b) continue;
+      var dx=b.x-a.x,dy=b.y-a.y;
+      if(Math.sqrt(dx*dx+dy*dy)<CFG.maxDist){
+        pulses.push({ax:a.x,ay:a.y,bx:b.x,by:b.y,t:0,
+          speed:CFG.pulseSpeed*(0.8+Math.random()*0.6)});
+        break;
+      }
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // vignette
+    var vg=ctx.createRadialGradient(W/2,H/2,H*0.1,W/2,H/2,H*0.85);
+    vg.addColorStop(0,'rgba(4,8,15,0)');
+    vg.addColorStop(1,'rgba(4,8,15,0.72)');
+    ctx.fillStyle=vg;
+    ctx.fillRect(0,0,W,H);
+
+    var now=performance.now()*0.001;
+
+    // update + draw nodes
+    for(var i=0;i<nodes.length;i++){
+      var n=nodes[i];
+
+      // mouse repulsion
+      var mx=n.x-mouse.x,my=n.y-mouse.y;
+      var md=Math.sqrt(mx*mx+my*my);
+      if(md<CFG.mouseRadius&&md>0.1){
+        var f=CFG.mouseStrength*(1-md/CFG.mouseRadius);
+        n.vx+=mx/md*f;
+        n.vy+=my/md*f;
+      }
+
+      // speed cap
+      var spd=Math.sqrt(n.vx*n.vx+n.vy*n.vy);
+      if(spd>CFG.nodeSpeed*2){n.vx*=0.95;n.vy*=0.95;}
+
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0){n.x=0;n.vx*=-1;}
+      if(n.x>W){n.x=W;n.vx*=-1;}
+      if(n.y<0){n.y=0;n.vy*=-1;}
+      if(n.y>H){n.y=H;n.vy*=-1;}
+
+      // draw edges to neighbours
+      for(var j=i+1;j<nodes.length;j++){
+        var o=nodes[j];
+        var dx=o.x-n.x,dy=o.y-n.y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<CFG.maxDist){
+          var alpha=0.18*(1-dist/CFG.maxDist);
+          ctx.beginPath();
+          ctx.moveTo(n.x,n.y);
+          ctx.lineTo(o.x,o.y);
+          ctx.strokeStyle='rgba('+CFG.accent+','+alpha+')';
+          ctx.lineWidth=0.7;
+          ctx.stroke();
+        }
+      }
+
+      // draw node glow
+      var pulse=0.5+0.5*Math.sin(now*n.pulseSpd*10+n.phase);
+      var glow=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*6+pulse*4);
+      glow.addColorStop(0,'rgba('+CFG.accent+','+(0.45+pulse*0.3)+')');
+      glow.addColorStop(1,'rgba('+CFG.accent+',0)');
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r*6+pulse*4,0,Math.PI*2);
+      ctx.fillStyle=glow;
+      ctx.fill();
+
+      // bright core
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r*(0.7+pulse*0.4),0,Math.PI*2);
+      ctx.fillStyle='rgba(180,230,255,'+(0.7+pulse*0.3)+')';
+      ctx.fill();
+    }
+
+    // update + draw pulse packets
+    for(var p=pulses.length-1;p>=0;p--){
+      var pk=pulses[p];
+      pk.t+=pk.speed;
+      if(pk.t>=1){pulses.splice(p,1);continue;}
+      var px=pk.ax+(pk.bx-pk.ax)*pk.t;
+      var py=pk.ay+(pk.by-pk.ay)*pk.t;
+
+      // outer glow
+      var pg=ctx.createRadialGradient(px,py,0,px,py,12);
+      pg.addColorStop(0,'rgba('+CFG.pulse+',0.7)');
+      pg.addColorStop(1,'rgba('+CFG.pulse+',0)');
+      ctx.beginPath();
+      ctx.arc(px,py,12,0,Math.PI*2);
+      ctx.fillStyle=pg;
+      ctx.fill();
+
+      // white core
+      ctx.beginPath();
+      ctx.arc(px,py,2.5,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,0.95)';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize',function(){resize();initNodes();});
+  window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;});
+  window.addEventListener('mouseleave',function(){mouse.x=-999;mouse.y=-999;});
+
+  resize();
+  initNodes();
+  setInterval(spawnPulse,420);
+  draw();
+})();
+
+// ── Scroll progress bar ───────────────────────────────────────────────────────
+(function(){
+  var bar=document.getElementById('scroll-progress');
+  if(!bar) return;
+  window.addEventListener('scroll',function(){
+    var s=document.documentElement.scrollTop||document.body.scrollTop;
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    bar.style.width=(h>0?Math.min(100,s/h*100):0)+'%';
+  },{passive:true});
+})();
+
+// ── Back to top ───────────────────────────────────────────────────────────────
+(function(){
+  var btn=document.getElementById('back-to-top');
+  if(!btn) return;
+  window.addEventListener('scroll',function(){
+    btn.classList.toggle('visible',window.scrollY>400);
+  },{passive:true});
+  btn.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+
+// ── Fade-in on scroll ─────────────────────────────────────────────────────────
+(function(){
+  var els=document.querySelectorAll('.fade-in');
+  if(!els.length) return;
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}
+    });
+  },{threshold:0.12});
+  els.forEach(function(el){io.observe(el);});
+})();
+
+// ── Animated stat counters ────────────────────────────────────────────────────
+(function(){
+  function easeOut(t){return 1-Math.pow(1-t,3);}
+  var counters=document.querySelectorAll('[data-count]');
+  if(!counters.length) return;
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var el=e.target;
+      var target=parseFloat(el.dataset.count);
+      var suffix=el.dataset.suffix||'';
+      var duration=1800;
+      var start=performance.now();
+      function tick(now){
+        var progress=Math.min((now-start)/duration,1);
+        var val=target*easeOut(progress);
+        el.textContent=(Number.isInteger(target)?Math.round(val):val.toFixed(1))+suffix;
+        if(progress<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      io.unobserve(el);
+    });
+  },{threshold:0.5});
+  counters.forEach(function(c){io.observe(c);});
+})();
+
+// ── Typewriter word cycler ────────────────────────────────────────────────────
+(function(){
+  var el=document.getElementById('typewriter');
+  if(!el) return;
+  var words=['Infrastructure','Cloud Solutions','Cybersecurity','IT Strategy','AWS & VMware','Managed Services'];
+  var wi=0,ci=0,deleting=false,paused=false;
+  function tick(){
+    if(paused) return;
+    var word=words[wi];
+    if(!deleting){
+      el.textContent=word.slice(0,ci+1);
+      ci++;
+      if(ci===word.length){paused=true;setTimeout(function(){deleting=true;paused=false;tick();},1600);return;}
+    } else {
+      el.textContent=word.slice(0,ci-1);
+      ci--;
+      if(ci===0){deleting=false;wi=(wi+1)%words.length;paused=true;setTimeout(function(){paused=false;tick();},400);return;}
+    }
+    setTimeout(tick,deleting?42:78);
+  }
+  tick();
+})();
+
+// ── Formspree async submission ────────────────────────────────────────────────
+(function(){
+  var form=document.getElementById('issueForm');
+  var msg=document.getElementById('formMessage');
+  if(!form||!msg) return;
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var btn=form.querySelector('.btn-submit');
+    btn.disabled=true;btn.textContent='SENDING…';
+    fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}})
+      .then(function(r){
+        if(r.ok){
+          msg.textContent='✓ Message received — we\'ll respond within 24 hours.';
+          msg.style.color='#00a8ff';
+          form.reset();
+        } else {
+          msg.textContent='✗ Submission failed. Please try again or call us directly.';
+          msg.style.color='#ff4d6d';
+        }
+        btn.disabled=false;btn.textContent='SUBMIT REQUEST';
+      })
+      .catch(function(){
+        msg.textContent='✗ Network error. Please try again.';
+        msg.style.color='#ff4d6d';
+        btn.disabled=false;btn.textContent='SUBMIT REQUEST';
+      });
+  });
+})();
+</script>
+</body>
+</html>
